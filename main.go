@@ -1,18 +1,13 @@
 package main
 
 import (
-	"log"
+	"net/http"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
-	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
-
-	log.Fatal(app.Listen(":3000"))
-
+	http.Handle("/metrics", promhttp.Handler())
+	http.ListenAndServe(":3000", nil)
 }
